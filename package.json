@@ -4,7 +4,7 @@
   "description": "This is my react repo",
   "scripts": {
     "test": "jest",
-    "start": "parcel index.html",
+    "dev": "parcel index.html",
     "build": "parcel build index.html"
   },
   "repository": {

@@ -1,19 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-
+// Core React syntax
+const ele = React.createElement(
+  "h1",
+  { id: "ele1" },
+  "This is a React Element",
+);
 const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(ele);
 
-const parent = React.createElement("div", { id: "parent" }, [
-  React.createElement("div", {}, [
-    React.createElement("h1", {}, "This is first child1"),
-    React.createElement("h2", {}, "This is first child2"),
-  ]),
-  React.createElement("div", {}, [
-    React.createElement("h1", {}, "This is second child1"),
-    React.createElement("h2", {}, "This is second child2"),
-  ]),
-]);
-
-root.render(parent);
-
+// JSX- HTML like syntax
+const ele2 = <h1 id="ele2">This is HTML like syntax</h1>;
+const grp = (
+  <div>
+    <h1 id="ele2">This is HTML like syntax</h1>
+    <h1 id="ele2">This is HTML like syntax</h1>
+  </div>
+);
+root.render(grp);

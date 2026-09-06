@@ -1,21 +1,25 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-// Core React syntax
-const ele = React.createElement(
-  "h1",
-  { id: "ele1" },
-  "This is a React Element",
-);
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(ele);
 
-// JSX- HTML like syntax
-const ele2 = <h1 id="ele2">This is HTML like syntax</h1>;
-const grp = (
-  <div>
-    <h1 id="ele2">This is HTML like syntax</h1>
-    <h1 id="ele2">This is HTML like syntax</h1>
-  </div>
-);
-root.render(grp);
+const Title = () => <h1 id="heading">This is a Title1</h1>;
+const Title2 = () => <h1 id="heading">This is a Title2</h1>;
+
+// React Functional Componenet
+// Component Composition
+const HeadingComponent = () => {
+  return (
+    <div>
+      <Title />
+      <Title></Title>
+      {Title()}
+      {200 + 300}
+      <h1>This is a h1 tag</h1>
+      <h2>This is a h2 tag</h2>
+      <h2>Adding two numbers: {100 + 200}</h2>
+    </div>
+  );
+};
+
+root.render(<HeadingComponent />);

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "This is my react repo",
   "scripts": {
+    "del":"rm -rf .parcel-cache dist",
     "test": "jest",
     "dev": "parcel index.html",
     "build": "parcel build index.html"
@@ -25,6 +26,7 @@
     "parcel": "^2.16.4"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   }

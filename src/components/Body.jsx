@@ -2,65 +2,81 @@ import RestaurantCard from "./RestaurantCard";
 // import { RESTAURANT_LIST } from "../utils/mockData";
 import { useState, useEffect } from "react";
 import Shimmer from "./Shimmer";
+import { SWIGGY_URL } from "../utils/constants";
 
 const Body = () => {
   // const [resList, setResList] = useState(RESTAURANT_LIST);
-  const [resList, setResList] = useState([]);
-  const [ratingInput, setRatingInput] = useState("");
+  const [restaurantList, setRestaurantList] = useState([]);
+
+  const [filteredRestaurantList, setFilteredRestaurantList] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  // const [ratingInput, setRatingInput] = useState("");
 
   useEffect(() => {
     fetchData();
   }, []);
 
   async function fetchData() {
-    const data = await fetch(
-      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.89975149558154&lng=77.63580048464019&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING",
-    );
+    const data = await fetch(SWIGGY_URL);
     const jsObj = await data.json();
     // console.log(jsObj);
-    setResList(
+    const restaurants =
       jsObj?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle
-        ?.restaurants,
-    );
+        ?.restaurants;
+    console.log(restaurants);
+
+    setRestaurantList(restaurants);
+    setFilteredRestaurantList(restaurants);
   }
 
-  const handleSearch = () => {
-    // const filterdResList = RESTAURANT_LIST.filter(
-    const filterdResList = resList.filter((restaurant) => {
-      return restaurant.info.avgRating > Number(ratingInput);
-    });
-    setResList(filterdResList);
-  };
-  if (resList.length === 0) {
-    return (
-      <div className="flex flex-wrap justify-center">
-        {Array.from({ length: 12 }, (_, index) => (
-          <Shimmer key={index} />
-        ))}
-      </div>
-    );
-  }
-  return (
-    <div className="">
-      <div className="flex m-4 items-center gap-2">
+  // const handleSearch = () => {
+  //   const filteredList = restaurantList.filter((restaurant) => {
+  //     return restaurant.info.avgRating > Number(ratingInput);
+  //   });
+  //   setFilteredRestaurantList(filteredList);
+  // };
+
+  return restaurantList.length === 0 ? (
+    <div className="flex flex-wrap justify-center">
+      {Array.from({ length: 12 }, (_, index) => (
+        <Shimmer key={index} />
+      ))}
+    </div>
+  ) : (
+    <div>
+      <div className="m-6 flex items-center justify-center gap-3">
         <input
           type="text"
-          className="border w-2xl rounded-md p-2 font-semibold"
-          placeholder="Search for restaurants using rating..."
-          value={ratingInput}
+          className="active:scale-97 h-10 w-full max-w-2xl rounded-lg border border-gray-300 px-3 text-base font-medium outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+          placeholder="Search for restaurants or cuisines..."
+          value={searchText}
           onChange={(e) => {
-            setRatingInput(e.target.value);
+            setSearchText(e.target.value);
           }}
         />
         <button
-          onClick={handleSearch}
-          className="bg-blue-500 text-xl cursor-pointer bold border-amber-50 rounded-md w-24 p-1.5 font-normal"
+          onClick={() => {
+            const searchTextLower = searchText.toLowerCase();
+            const filteredList = restaurantList.filter((restaurant) => {
+              if (
+                restaurant.info.name.toLowerCase().includes(searchTextLower) ||
+                restaurant.info.cuisines
+                  .join(", ")
+                  .toLowerCase()
+                  .includes(searchTextLower)
+              ) {
+                return true;
+              }
+            });
+            setFilteredRestaurantList(filteredList);
+          }}
+          className="h-10 border w-auto px-4 rounded-lg bg-blue-500 text-xl font-semibold text-white shadow-sm transition hover:bg-blue-600 active:scale-95"
         >
           Search
         </button>
       </div>
       <div className="flex flex-wrap justify-center">
-        {resList.map((restaurant) => (
+        {filteredRestaurantList.map((restaurant) => (
           <RestaurantCard key={restaurant.info.id} resData={restaurant} />
         ))}
       </div>

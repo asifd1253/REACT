@@ -5,7 +5,7 @@
   "scripts": {
     "del":"rm -rf .parcel-cache dist",
     "test": "jest",
-    "dev": "parcel index.html",
+    "dev": "npm run del && parcel index.html",
     "build": "parcel build index.html"
   },
   "repository": {

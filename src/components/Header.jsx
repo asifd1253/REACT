@@ -22,19 +22,23 @@ const Header = () => {
       <nav>
         <ul className="flex items-center gap-8">
           <li className="cursor-pointer font-medium active:scale-95">Home</li>
+
           <li className="cursor-pointer font-medium active:scale-95">Orders</li>
+
           <li className="cursor-pointer font-medium active:scale-95">Cart</li>
+
           <li className="cursor-pointer font-medium active:scale-95">
             Profile
           </li>
-          {/* <li className="cursor-pointer font-medium">Login</li>
-          <li className="cursor-pointer font-medium">Signup</li> */}
-          <button
-            onClick={handleLoginBtn}
-            className="cursor-pointer border border-gray-300 w-auto px-2 rounded-lg bg-white py-0.5 font-semibold text-gray-700 shadow-sm transition-all duration-200 hover:border-blue-500 hover:text-blue-600 active:scale-95"
-          >
-            {loginBtn}
-          </button>
+
+          <li>
+            <button
+              onClick={handleLoginBtn}
+              className="cursor-pointer rounded-lg border-2 border-gray-300 bg-white px-3 py-1 font-semibold text-white-700 transition-all duration-300 hover:border-blue-500 hover:bg-blue-100 hover:text-white-500 active:scale-95"
+            >
+              {loginBtn}
+            </button>
+          </li>
         </ul>
       </nav>
     </header>

@@ -5,3 +5,5 @@ export const IMAGE_CDN_URL =
 
 export const SWIGGY_URL =
   "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.89975149558154&lng=77.63580048464019&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING";
+
+export const CORS_PROXY_URL = `https://corsproxy.io/?key=da3f76f8&url=${encodeURIComponent(SWIGGY_URL)}`;

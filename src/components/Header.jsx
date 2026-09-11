@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { LOGO } from "../utils/constants";
+import { Link } from "react-router";
+
 const Header = () => {
   const [loginBtn, setLoginBtn] = useState("Login");
 
@@ -21,14 +23,24 @@ const Header = () => {
       </div>
       <nav>
         <ul className="flex items-center gap-8">
-          <li className="cursor-pointer font-medium active:scale-95">Home</li>
-
-          <li className="cursor-pointer font-medium active:scale-95">Orders</li>
-
-          <li className="cursor-pointer font-medium active:scale-95">Cart</li>
+          <li className="cursor-pointer font-medium active:scale-95">
+            <Link to="/">Home</Link>
+          </li>
 
           <li className="cursor-pointer font-medium active:scale-95">
-            Profile
+            <Link to="/about">About</Link>
+          </li>
+
+          <li className="cursor-pointer font-medium active:scale-95">
+            <Link to="/">Orders</Link>
+          </li>
+
+          <li className="cursor-pointer font-medium active:scale-95">
+            <Link to="/">Cart</Link>
+          </li>
+
+          <li className="cursor-pointer font-medium active:scale-95">
+            <Link to="/profile">Profile</Link>
           </li>
 
           <li>

@@ -1,7 +1,11 @@
 import RestaurantCard from "./RestaurantCard";
 import { useState, useEffect } from "react";
 import Shimmer from "./Shimmer";
-import { CORS_PROXY_URL, SWIGGY_URL } from "../utils/constants";
+import {
+  CORS_PROXY_URL,
+  SWIGGY_URL,
+  RESTAURANTS_API,
+} from "../utils/constants";
 
 const Body = () => {
   const [restaurantList, setRestaurantList] = useState([]);
@@ -16,7 +20,8 @@ const Body = () => {
   async function fetchData() {
     try {
       // const response = await fetch(CORS_PROXY_URL);
-      const response = await fetch(SWIGGY_URL);
+      // const response = await fetch(SWIGGY_URL);
+      const response = await fetch(RESTAURANTS_API);
       const jsObj = await response.json();
       // console.log(jsObj);
 
@@ -29,6 +34,7 @@ const Body = () => {
         [];
       // console.log("Restaurant Card:", restaurantCard);
       // console.log("Restaurants:", restaurants);
+      // console.log(restaurants.map((restaurant) => restaurant.info.id));
 
       setRestaurantList(restaurants);
       setFilteredRestaurantList(restaurants);

@@ -1,13 +1,15 @@
 import React from "react";
 import { IMAGE_CDN_URL } from "../utils/constants";
+import {Link} from "react-router";
 
 const RestaurantCard = (props) => {
   const { resData } = props;
 
-  const { cloudinaryImageId, name, cuisines, avgRating, sla, costForTwo } =
+  const { cloudinaryImageId, name, cuisines, avgRating, sla, costForTwo, id } =
     resData?.info || {};
 
   return (
+    <Link to={"/restaurant/"+id}>
     <div className="m-4 w-64 cursor-pointer rounded-xl border border-gray-200 bg-white p-3 shadow-md active:scale-95">
       <img
         src={IMAGE_CDN_URL + cloudinaryImageId}
@@ -35,6 +37,7 @@ const RestaurantCard = (props) => {
         <p className="mt-2 text-sm font-medium text-gray-600">{costForTwo}</p>
       </div>
     </div>
+    </Link>
   );
 };
 

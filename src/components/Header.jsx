@@ -15,11 +15,13 @@ const Header = () => {
   return (
     <header className="flex items-center justify-between bg-gray-100 px-8 py-4 shadow-md">
       <div className="w-28">
-        <img
-          src={LOGO}
-          alt="logo"
-          className="active:scale-95 w-full h-auto object-contain cursor-pointer"
-        />
+        <Link to="/">
+          <img
+            src={LOGO}
+            alt="logo"
+            className="active:scale-95 w-full h-auto object-contain cursor-pointer"
+          />
+        </Link>
       </div>
       <nav>
         <ul className="flex items-center gap-8">

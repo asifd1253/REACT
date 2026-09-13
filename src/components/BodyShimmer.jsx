@@ -1,4 +1,4 @@
-const Shimmer = () => {
+const BodyShimmer = () => {
   return (
     <div className="m-4 w-64 rounded-xl border border-gray-200 bg-white p-3 shadow-md">
       {/* Image Skeleton */}
@@ -26,4 +26,4 @@ const Shimmer = () => {
   );
 };
 
-export default Shimmer;
+export default BodyShimmer;

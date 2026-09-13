@@ -2,11 +2,15 @@ import { useState, useEffect } from "react";
 import { MENU_API } from "../utils/constants";
 import { useParams } from "react-router";
 import MenuCategory from "./MenuCategory";
+import MenuShimmer from "./MenuShimmer";
 
 const RestaurantMenu = () => {
   const { restaurantId } = useParams();
   const [restaurantInfo, setRestaurantInfo] = useState({});
   const [menuItems, setMenuItems] = useState([]);
+  const [searchMenuText, setSearchMenuText] = useState("");
+  const [filteredMenuItems, setFilteredMenuItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     fectchMenuData();
   }, [restaurantId]);
@@ -72,13 +76,16 @@ const RestaurantMenu = () => {
 
       // console.log(extractedMenuItems);
       setMenuItems(extractedMenuItems);
+      setFilteredMenuItems(extractedMenuItems);
     } catch (error) {
       console.log("Error fetching Menu: ", error.message);
+    } finally {
+      setIsLoading(false);
     }
   }
 
-  // group the items based on their category
-  const groupedMenuItems = menuItems.reduce((acc, curItem) => {
+  // group the items based on their filteredMenuItems
+  const groupedMenuItems = filteredMenuItems.reduce((acc, curItem) => {
     if (!acc[curItem.category]) {
       acc[curItem.category] = [];
     }
@@ -86,6 +93,26 @@ const RestaurantMenu = () => {
 
     return acc;
   }, {});
+
+  useEffect(() => {
+    const searchTextLower = searchMenuText.toLowerCase();
+    const filteredMenu = menuItems.filter((curItem) => {
+      const curItemName = curItem?.name?.toLowerCase() || "";
+      const curItemDescription = curItem?.description?.toLowerCase() || "";
+      const curItemCategory = curItem?.category?.toLowerCase() || "";
+
+      return (
+        curItemName.includes(searchTextLower) ||
+        curItemDescription.includes(searchTextLower) ||
+        curItemCategory.includes(searchTextLower)
+      );
+    });
+    setFilteredMenuItems(filteredMenu);
+  }, [searchMenuText, menuItems]);
+  
+  if (isLoading) {
+    return <MenuShimmer />;
+  }
   return (
     <main>
       <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
@@ -150,6 +177,17 @@ const RestaurantMenu = () => {
 
         {/* Menu Items Started */}
         <section className="mt-8">
+          <div className="m-6 flex items-center justify-center gap-3">
+            <input
+              type="text"
+              className="active:scale-95 h-10 w-full max-w-2xl rounded-lg border border-gray-300 px-3 text-base font-medium outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              placeholder="Search for dishes or category..."
+              value={searchMenuText}
+              onChange={(e) => {
+                setSearchMenuText(e.target.value);
+              }}
+            />
+          </div>
           {/* Heading of menu */}
           <div className="flex flex-col gap-3 mb-6 sm:items-end sm:justify-between sm:flex-row">
             <div>

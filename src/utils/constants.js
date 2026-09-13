@@ -16,3 +16,8 @@ export const RESTAURANTS_API =
 
 export const MENU_API =
   "https://raw.githubusercontent.com/asifd1253/food-world-api/main/menu";
+
+export const DROPDOWN_ICON = new URL(
+  "../assets/dropdown-arrow.svg",
+  import.meta.url,
+).href;

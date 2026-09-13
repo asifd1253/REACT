@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { MENU_API } from "../utils/constants";
 import { useParams } from "react-router";
 import MenuCategory from "./MenuCategory";
+import MenuShimmer from "./MenuShimmer";
 
 const RestaurantMenu = () => {
   const { restaurantId } = useParams();
@@ -9,6 +10,7 @@ const RestaurantMenu = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [searchMenuText, setSearchMenuText] = useState("");
   const [filteredMenuItems, setFilteredMenuItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     fectchMenuData();
   }, [restaurantId]);
@@ -77,6 +79,8 @@ const RestaurantMenu = () => {
       setFilteredMenuItems(extractedMenuItems);
     } catch (error) {
       console.log("Error fetching Menu: ", error.message);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -105,7 +109,10 @@ const RestaurantMenu = () => {
     });
     setFilteredMenuItems(filteredMenu);
   }, [searchMenuText, menuItems]);
-
+  
+  if (isLoading) {
+    return <MenuShimmer />;
+  }
   return (
     <main>
       <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">

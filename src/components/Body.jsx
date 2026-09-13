@@ -1,6 +1,6 @@
 import RestaurantCard from "./RestaurantCard";
 import { useState, useEffect } from "react";
-import Shimmer from "./Shimmer";
+import BodyShimmer from "./BodyShimmer";
 import {
   CORS_PROXY_URL,
   SWIGGY_URL,
@@ -62,7 +62,7 @@ const Body = () => {
   return restaurantList.length === 0 ? (
     <div className="flex flex-wrap justify-center">
       {Array.from({ length: 12 }, (_, index) => (
-        <Shimmer key={index} />
+        <BodyShimmer key={index} />
       ))}
     </div>
   ) : (

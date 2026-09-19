@@ -3,25 +3,24 @@ import React from "react";
 class UserClass extends React.Component {
   constructor(props) {
     super(props);
-    console.log("child constructor ");
+    this.timer = null;
   }
-  componentDidMount() {
-    console.log("child Component Did Mount");
+  componentDidUpdate() {
+    this.timer = setInterval(() => {
+      console.log("setInterval");
+    }, 1000);
+    console.log("userClass componentDidUpdate");
+  }
+  componentWillUnmount() {
+    clearInterval(this.timer);
+    console.log("userClass componentWillUnmount");
   }
   render() {
-    console.log("child render");
-
+    const { userInfo } = this.props;
     return (
       <div>
-        <h1>My name is {this.props.name}</h1>
-        <p>I am {this.props.age} years old</p>
-        {/* <button
-          onClick={() => {
-            this.setState({ age: this.state.age + 1 });
-          }}
-        >
-          Increase Age
-        </button> */}
+        <img src={userInfo.avatar_url} alt="image" />
+        <p>My name is {userInfo.name}</p>
       </div>
     );
   }

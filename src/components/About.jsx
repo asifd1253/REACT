@@ -4,25 +4,26 @@ import UserClass from "./UserClass";
 class About extends React.Component {
   constructor(props) {
     super(props);
-    console.log("Parent constructor");
 
     this.state = {
-      name: "Asif",
-      age: 23,
+      userInfo: {
+        name: "Dummy Name",
+        avatar_url: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+      },
     };
   }
-  componentDidMount() {
-    console.log("Parent Component Did Mount");
+  async componentDidMount() {
+    const response = await fetch("https://api.github.com/users/asifd1253");
+    const json = await response.json();
+    console.log(json);
+    this.setState({
+      userInfo: json,
+    });
   }
   render() {
-    console.log("parent render");
-
     return (
       <div>
-        <h1>About Us</h1>
-        <p>This is a food delivery app</p>
-        <UserClass name={this.state.name} age={this.state.age} />
-        <UserClass name="Alice" age={25} />
+        <UserClass userInfo={this.state.userInfo} />
       </div>
     );
   }

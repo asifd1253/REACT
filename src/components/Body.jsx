@@ -2,12 +2,15 @@ import RestaurantCard from "./RestaurantCard";
 import { useState, useEffect } from "react";
 import BodyShimmer from "./BodyShimmer";
 import useRestaurants from "../hooks/useRestaurants";
+import useOnlineStatus from "../hooks/useOnlineStatus";
+import OfflineStatus from "./OfflineStatus";
 
 const Body = () => {
   const { restaurantList } = useRestaurants();
 
   const [filteredRestaurantList, setFilteredRestaurantList] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const curStatus = useOnlineStatus();
 
   useEffect(() => {
     const searchTextLower = searchText.toLowerCase();
@@ -25,6 +28,9 @@ const Body = () => {
     setFilteredRestaurantList(filteredList);
   }, [searchText, restaurantList]);
 
+  if (curStatus === false) {
+    return <OfflineStatus />;
+  }
   return restaurantList.length === 0 ? (
     <div className="flex flex-wrap justify-center">
       {Array.from({ length: 12 }, (_, index) => (

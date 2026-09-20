@@ -1,9 +1,16 @@
 import { useState } from "react";
 import { LOGO } from "../utils/constants";
 import { Link } from "react-router";
+// import useOnlineStatus from "../hooks/useOnlineStatus";
+// import OfflineStatus from "./OfflineStatus";
 
 const Header = () => {
   const [loginBtn, setLoginBtn] = useState("Login");
+
+  // const curStatus = useOnlineStatus();
+  // if (curStatus === false) {
+  //   return <OfflineStatus />;
+  // }
 
   function handleLoginBtn() {
     if (loginBtn === "Login") {
@@ -19,7 +26,7 @@ const Header = () => {
           <img
             src={LOGO}
             alt="logo"
-            className="active:scale-95 w-full h-auto object-contain cursor-pointer"
+            className="h-auto w-full cursor-pointer object-contain active:scale-95"
           />
         </Link>
       </div>
@@ -48,7 +55,7 @@ const Header = () => {
           <li>
             <button
               onClick={handleLoginBtn}
-              className="cursor-pointer rounded-lg border-2 border-gray-300 bg-white px-3 py-1 font-semibold text-white-700 transition-all duration-300 hover:border-blue-500 hover:bg-blue-100 hover:text-white-500 active:scale-95"
+              className="text-white-700 hover:text-white-500 cursor-pointer rounded-lg border-2 border-gray-300 bg-white px-3 py-1 font-semibold transition-all duration-300 hover:border-blue-500 hover:bg-blue-100 active:scale-95"
             >
               {loginBtn}
             </button>

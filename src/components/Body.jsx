@@ -7,6 +7,7 @@ import OfflineStatus from "./OfflineStatus";
 
 const Body = () => {
   const { restaurantList } = useRestaurants();
+  console.log(restaurantList);
 
   const [filteredRestaurantList, setFilteredRestaurantList] = useState([]);
   const [searchText, setSearchText] = useState("");

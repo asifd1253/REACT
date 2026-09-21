@@ -13,6 +13,7 @@ const RestaurantMenu = () => {
   // console.log(restaurantInfo);
   const [searchMenuText, setSearchMenuText] = useState("");
   const [filteredMenuItems, setFilteredMenuItems] = useState([]);
+  // const [showCategory, setShowCategory] = useState(0);
 
   // group the items based on their filteredMenuItems
   const groupedMenuItems = filteredMenuItems.reduce((acc, curItem) => {
@@ -135,7 +136,7 @@ const RestaurantMenu = () => {
           {/* Categories */}
           <div>
             {Object.entries(groupedMenuItems).map(
-              ([categoryName, curCategoryItems]) => {
+              ([categoryName, curCategoryItems], index) => {
                 // console.log(categoryName);
                 // console.log(curCategoryItems);
                 return (
@@ -143,6 +144,8 @@ const RestaurantMenu = () => {
                     key={categoryName}
                     categoryName={categoryName}
                     curCategoryItems={curCategoryItems}
+                    // showCategory={index === showCategory? true : false}
+                    // setShowCategory={()=>setShowCategory(index)}
                   />
                 );
               },

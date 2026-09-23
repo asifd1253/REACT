@@ -4,14 +4,17 @@ import { useState } from "react";
 import { DROPDOWN_ICON } from "../utils/constants";
 
 const MenuCategory = ({ categoryName, curCategoryItems }) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const handleCollapse = () => {
     setIsOpen(!isOpen);
   };
   return (
-    <article className="border rounded-2xl mb-6 border-slate-200 bg-white shadow-sm">
+    <article className="mb-6 rounded-2xl border border-slate-200 bg-white shadow-sm">
       {/* Category Heading */}
-      <div className="flex items-center justify-between gap-4 border-b border-slate-100 bg-slate-50/80 px-5 py-4 sm:px-6">
+      <div
+        onClick={handleCollapse}
+        className="flex cursor-pointer items-center justify-between gap-4 border-b border-slate-100 bg-slate-50/80 px-5 py-4 sm:px-6"
+      >
         <p className="text-lg font-bold text-slate-950 sm:text-xl">
           {categoryName}
         </p>
@@ -24,7 +27,7 @@ const MenuCategory = ({ categoryName, curCategoryItems }) => {
           {/* Collapse Button */}
           <button
             onClick={handleCollapse}
-            className="flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center  text-xl font-bold text-slate-700 transition-all active:scale-95"
+            className="flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center text-xl font-bold text-slate-700 transition-all active:scale-95"
             aria-label={isOpen ? "Collapse category" : "Expand category"}
           >
             {isOpen ? (
@@ -49,7 +52,7 @@ const MenuCategory = ({ categoryName, curCategoryItems }) => {
                 {/* Items left part */}
                 <div className="min-w-0 flex-1">
                   {/* veg / Non-veg */}
-                  <div className="flex items-center gap-2 mb-3">
+                  <div className="mb-3 flex items-center gap-2">
                     <span
                       className={`flex h-5 w-5 items-center justify-center rounded-sm border ${curItem.isVeg ? "border-emerald-600" : "border-rose-600"}`}
                     >
@@ -59,14 +62,14 @@ const MenuCategory = ({ categoryName, curCategoryItems }) => {
                       ></span>
                     </span>
                     <span
-                      className={`font-bold uppercase tracking-wide text-xs ${curItem.isVeg ? "text-emerald-600" : "text-rose-600"}`}
+                      className={`text-xs font-bold uppercase tracking-wide ${curItem.isVeg ? "text-emerald-600" : "text-rose-600"}`}
                     >
                       {curItem.isVeg ? "Veg" : "Non-veg"}
                     </span>
                   </div>
 
                   {/* curItem name */}
-                  <div className="text-lg font-bold text-slate-950 leading-snug">
+                  <div className="text-lg font-bold leading-snug text-slate-950">
                     {curItem.name}
                   </div>
 
@@ -114,7 +117,7 @@ const MenuCategory = ({ categoryName, curCategoryItems }) => {
                   </div>
 
                   {/* Add button */}
-                  <button className="rounded-xl absolute -bottom-4 left-1/2 -translate-x-1/2 border border-emerald-200 bg-white px-6 py-2 text-sm font-extrabold text-emerald-700 shadow-lg hover:bg-emerald-50">
+                  <button className="absolute -bottom-4 left-1/2 -translate-x-1/2 rounded-xl border border-emerald-200 bg-white px-6 py-2 text-sm font-extrabold text-emerald-700 shadow-lg hover:bg-emerald-50">
                     ADD
                   </button>
                 </div>

@@ -1,47 +1,17 @@
 import RestaurantCard from "./RestaurantCard";
 import { useState, useEffect } from "react";
 import BodyShimmer from "./BodyShimmer";
-import {
-  CORS_PROXY_URL,
-  SWIGGY_URL,
-  RESTAURANTS_API,
-} from "../utils/constants";
+import useRestaurants from "../hooks/useRestaurants";
+import useOnlineStatus from "../hooks/useOnlineStatus";
+import OfflineStatus from "./OfflineStatus";
 
 const Body = () => {
-  const [restaurantList, setRestaurantList] = useState([]);
+  const { restaurantList } = useRestaurants();
+  console.log(restaurantList);
+
   const [filteredRestaurantList, setFilteredRestaurantList] = useState([]);
   const [searchText, setSearchText] = useState("");
-  // const [ratingInput, setRatingInput] = useState("");
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  async function fetchData() {
-    try {
-      // const response = await fetch(CORS_PROXY_URL);
-      // const response = await fetch(SWIGGY_URL);
-      const response = await fetch(RESTAURANTS_API);
-      const jsObj = await response.json();
-      // console.log(jsObj);
-
-      const cards = jsObj?.data?.cards || [];
-      const restaurantCard = cards.find(
-        (card) => card?.card?.card?.gridElements?.infoWithStyle?.restaurants,
-      );
-      const restaurants =
-        restaurantCard?.card?.card?.gridElements?.infoWithStyle?.restaurants ||
-        [];
-      // console.log("Restaurant Card:", restaurantCard);
-      // console.log("Restaurants:", restaurants);
-      // console.log(restaurants.map((restaurant) => restaurant.info.id));
-
-      setRestaurantList(restaurants);
-      setFilteredRestaurantList(restaurants);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
+  const curStatus = useOnlineStatus();
 
   useEffect(() => {
     const searchTextLower = searchText.toLowerCase();
@@ -59,6 +29,9 @@ const Body = () => {
     setFilteredRestaurantList(filteredList);
   }, [searchText, restaurantList]);
 
+  if (curStatus === false) {
+    return <OfflineStatus />;
+  }
   return restaurantList.length === 0 ? (
     <div className="flex flex-wrap justify-center">
       {Array.from({ length: 12 }, (_, index) => (
@@ -70,7 +43,7 @@ const Body = () => {
       <div className="m-6 flex items-center justify-center gap-3">
         <input
           type="text"
-          className="active:scale-95 h-10 w-full max-w-2xl rounded-lg border border-gray-300 px-3 text-base font-medium outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+          className="h-10 w-full max-w-2xl rounded-lg border border-gray-300 px-3 text-base font-medium outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200 active:scale-95"
           placeholder="Search for restaurants or cuisines..."
           value={searchText}
           onChange={(e) => {

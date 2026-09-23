@@ -1,88 +1,19 @@
 import { useState, useEffect } from "react";
-import { MENU_API } from "../utils/constants";
 import { useParams } from "react-router";
 import MenuCategory from "./MenuCategory";
 import MenuShimmer from "./MenuShimmer";
+import useRestuarantMenu from "../hooks/useRestaurantMenu";
 
 const RestaurantMenu = () => {
   const { restaurantId } = useParams();
-  const [restaurantInfo, setRestaurantInfo] = useState({});
-  const [menuItems, setMenuItems] = useState([]);
+
+  const { restaurantInfo, menuItems, isLoading } =
+    useRestuarantMenu(restaurantId);
+
+  // console.log(restaurantInfo);
   const [searchMenuText, setSearchMenuText] = useState("");
   const [filteredMenuItems, setFilteredMenuItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    fectchMenuData();
-  }, [restaurantId]);
-
-  async function fectchMenuData() {
-    try {
-      const response = await fetch(`${MENU_API}/${restaurantId}.json`);
-      const data = await response.json();
-      // console.log(data);
-
-      const cardsOfArray = data?.data?.cards || [];
-
-      // finding the Restaurant card
-      const restaurantCard = cardsOfArray.find((arrayIdx) => {
-        return arrayIdx?.card?.card?.info;
-      });
-      // console.log(restaurantCard);
-
-      const info = restaurantCard?.card?.card?.info;
-
-      setRestaurantInfo(info || {});
-
-      // finding the menu in the restaurant
-      const menu = cardsOfArray.find((arrayIdx) => {
-        return arrayIdx?.groupedCard?.cardGroupMap?.REGULAR?.cards;
-      });
-
-      const menuItems = menu?.groupedCard?.cardGroupMap?.REGULAR?.cards || [];
-
-      const extractedMenuItems = menuItems.flatMap((menuArrayIdx) => {
-        const menuData = menuArrayIdx?.card?.card;
-
-        // Normal category
-        if (
-          menuData?.["@type"] ===
-          "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory"
-        ) {
-          return (
-            menuData.itemCards?.map((item) => ({
-              category: menuData.title,
-              ...item.card.info,
-            })) || []
-          );
-        }
-
-        // Nested category
-        if (
-          menuData?.["@type"] ===
-          "type.googleapis.com/swiggy.presentation.food.v2.NestedItemCategory"
-        ) {
-          return (
-            menuData.categories?.flatMap(
-              (category) =>
-                category.itemCards?.map((item) => ({
-                  category: `${menuData.title} / ${category.title}`,
-                  ...item.card.info,
-                })) || [],
-            ) || []
-          );
-        }
-        return [];
-      });
-
-      // console.log(extractedMenuItems);
-      setMenuItems(extractedMenuItems);
-      setFilteredMenuItems(extractedMenuItems);
-    } catch (error) {
-      console.log("Error fetching Menu: ", error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  // const [showCategory, setShowCategory] = useState(0);
 
   // group the items based on their filteredMenuItems
   const groupedMenuItems = filteredMenuItems.reduce((acc, curItem) => {
@@ -109,7 +40,7 @@ const RestaurantMenu = () => {
     });
     setFilteredMenuItems(filteredMenu);
   }, [searchMenuText, menuItems]);
-  
+
   if (isLoading) {
     return <MenuShimmer />;
   }
@@ -118,9 +49,9 @@ const RestaurantMenu = () => {
       <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Restaurant Banner */}
         <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="bg-gradient-to-r from-emerald-700 via-teal-700 to-cyan-700 text-white px-6 py-8 sm:px-8">
+          <div className="bg-gradient-to-r from-emerald-700 via-teal-700 to-cyan-700 px-6 py-8 text-white sm:px-8">
             {/* Upper part banner */}
-            <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between ">
+            <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
               {/* Restaurant Details */}
               <div>
                 <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
@@ -133,19 +64,19 @@ const RestaurantMenu = () => {
               </div>
               {/* Restaurant stats */}
               <div className="grid grid-cols-3 gap-3 text-center sm:min-w-80">
-                <div className="bg-white/15 rounded-xl px-3 py-3 backdrop-blur">
+                <div className="rounded-xl bg-white/15 px-3 py-3 backdrop-blur">
                   <p className="text-xs font-medium text-emerald-50">Rating</p>
                   <p className="mt-1 text-lg font-bold">
                     {restaurantInfo.avgRating || "N/A"}
                   </p>
                 </div>
-                <div className="bg-white/15 rounded-xl px-3 py-3 backdrop-blur">
+                <div className="rounded-xl bg-white/15 px-3 py-3 backdrop-blur">
                   <p className="text-xs font-medium text-emerald-50">Area</p>
                   <p className="mt-1 text-lg font-bold">
                     {restaurantInfo.areaName || "N/A"}
                   </p>
                 </div>
-                <div className="bg-white/15 rounded-xl px-3 py-3 backdrop-blur">
+                <div className="rounded-xl bg-white/15 px-3 py-3 backdrop-blur">
                   <p className="text-xs font-medium text-emerald-50">Items</p>
                   <p className="mt-1 text-lg font-bold">{menuItems.length}</p>
                 </div>
@@ -153,13 +84,13 @@ const RestaurantMenu = () => {
             </div>
           </div>
           {/* Bottom part banner */}
-          <div className="gap-3 flex flex-wrap items-center border-t border-slate-100 px-6 py-4 text-sm text-slate-600 sm:px-8">
+          <div className="flex flex-wrap items-center gap-3 border-t border-slate-100 px-6 py-4 text-sm text-slate-600 sm:px-8">
             {/* cusines */}
             {restaurantInfo.cuisines?.map((cuisine) => {
               return (
                 <span
                   key={cuisine}
-                  className="rounded-full px-3 py-1 font-semibold text-emerald-700 bg-emerald-50"
+                  className="rounded-full bg-emerald-50 px-3 py-1 font-semibold text-emerald-700"
                 >
                   {cuisine}
                 </span>
@@ -180,7 +111,7 @@ const RestaurantMenu = () => {
           <div className="m-6 flex items-center justify-center gap-3">
             <input
               type="text"
-              className="active:scale-95 h-10 w-full max-w-2xl rounded-lg border border-gray-300 px-3 text-base font-medium outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              className="h-10 w-full max-w-2xl rounded-lg border border-gray-300 px-3 text-base font-medium outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200 active:scale-95"
               placeholder="Search for dishes or category..."
               value={searchMenuText}
               onChange={(e) => {
@@ -189,9 +120,9 @@ const RestaurantMenu = () => {
             />
           </div>
           {/* Heading of menu */}
-          <div className="flex flex-col gap-3 mb-6 sm:items-end sm:justify-between sm:flex-row">
+          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="tracking-[0.18em] text-sm font-semibold uppercase text-emerald-700">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">
                 Order online
               </p>
               <p className="mt-1 text-2xl font-extrabold text-slate-950">
@@ -205,7 +136,7 @@ const RestaurantMenu = () => {
           {/* Categories */}
           <div>
             {Object.entries(groupedMenuItems).map(
-              ([categoryName, curCategoryItems]) => {
+              ([categoryName, curCategoryItems], index) => {
                 // console.log(categoryName);
                 // console.log(curCategoryItems);
                 return (
@@ -213,6 +144,8 @@ const RestaurantMenu = () => {
                     key={categoryName}
                     categoryName={categoryName}
                     curCategoryItems={curCategoryItems}
+                    // showCategory={index === showCategory? true : false}
+                    // setShowCategory={()=>setShowCategory(index)}
                   />
                 );
               },

@@ -1,26 +1,33 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { LOGO } from "../utils/constants";
 import { Link } from "react-router";
+import UserContext from "../contexts/UserContext";
 // import useOnlineStatus from "../hooks/useOnlineStatus";
 // import OfflineStatus from "./OfflineStatus";
+import { ShoppingCart } from "lucide-react";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const [loginBtn, setLoginBtn] = useState("Login");
 
-  // const curStatus = useOnlineStatus();
-  // if (curStatus === false) {
-  //   return <OfflineStatus />;
-  // }
+  const { loggedInUser } = useContext(UserContext);
+
+  const cartItems = useSelector((store) => store.cart.items);
+  // console.log(cartItems);
+
+  const totalItems = cartItems.reduce((acc, curItem) => {
+    return acc + curItem.quantity;
+  }, 0);
 
   function handleLoginBtn() {
     if (loginBtn === "Login") {
-      setLoginBtn("Signup");
+      setLoginBtn(loggedInUser);
     } else {
       setLoginBtn("Login");
     }
   }
   return (
-    <header className="flex items-center justify-between bg-gray-100 px-8 py-4 shadow-md">
+    <header className="sticky top-0 z-50 flex items-center justify-between bg-gray-100 px-8 py-4 shadow-md">
       <div className="w-28">
         <Link to="/">
           <img
@@ -45,7 +52,17 @@ const Header = () => {
           </li>
 
           <li className="cursor-pointer font-medium active:scale-95">
-            <Link to="/">Cart</Link>
+            <Link
+              to="/cart"
+              className="flex items-center gap-2 transition-colors hover:text-blue-600"
+            >
+              <ShoppingCart size={20} />
+              <span>Cart</span>
+
+              <span className="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-bold text-white">
+                {totalItems}
+              </span>
+            </Link>
           </li>
 
           <li className="cursor-pointer font-medium active:scale-95">

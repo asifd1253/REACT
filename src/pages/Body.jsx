@@ -1,13 +1,13 @@
-import RestaurantCard from "./RestaurantCard";
+import RestaurantCard from "../components/RestaurantCard";
 import { useState, useEffect } from "react";
-import BodyShimmer from "./BodyShimmer";
+import BodyShimmer from "../components/BodyShimmer";
 import useRestaurants from "../hooks/useRestaurants";
 import useOnlineStatus from "../hooks/useOnlineStatus";
-import OfflineStatus from "./OfflineStatus";
+import OfflineStatus from "../components/OfflineStatus";
 
 const Body = () => {
   const { restaurantList } = useRestaurants();
-  console.log(restaurantList);
+  // console.log(restaurantList);
 
   const [filteredRestaurantList, setFilteredRestaurantList] = useState([]);
   const [searchText, setSearchText] = useState("");

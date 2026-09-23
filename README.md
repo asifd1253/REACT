@@ -37,4 +37,14 @@
 - npm i react-dom/client
 
 # execute parcel for production
+
 - npx parecel build index.html
+
+# Redux Tookit
+
+- Install @reduxjs/toolkit and react-redux
+- Build our Store
+- Connect out store to our app
+- Slice (cartSlice)
+- dispatch(action)
+- Selector
